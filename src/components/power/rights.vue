@@ -1,0 +1,48 @@
+<template>
+  <div>
+        <!-- 面包屑导航 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>权限管理</el-breadcrumb-item>
+      <el-breadcrumb-item>权限列表</el-breadcrumb-item>
+    </el-breadcrumb>
+    <!-- 卡片视图 -->
+    <el-card>
+      <el-table :data="rightsList" border stripe :default-sort="{prop: 'path',order:'descending'}">
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label='权限名称' prop="right"></el-table-column>
+        <el-table-column label="路径" prop="path" ></el-table-column>
+        <el-table-column label="权限等级" prop="authName">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.authName == 0" type="success">一级标签</el-tag>
+            <el-tag v-else-if="scope.row.authName == 1" type="error">二级标签</el-tag>
+            <el-tag v-else type="warning">三级标签</el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      // 权限列表
+      rightsList: []
+    }
+  },
+  created() {
+    // 获取所有权限
+    this.getRightsList()
+  },
+  methods: {
+    // 获取权限列表
+    async getRightsList() {
+      const res = await this.$http.get('rights/list')
+      this.rightsList = res
+    }
+  }
+}
+</script>
+<style lang="less" scoped>
+</style>
